@@ -32,8 +32,8 @@ try:
 	payload= open('payload.json').read()
 	checksum = hashlib.md5(payload).hexdigest()
 	print ('sftp used and the checksum = ',checksum)
-        sftp.cd('/home/AbuSakif')               # temporarily chdir to public
-        sftp.put('payload.json','/home/AbuSakif/ProjectDiamond/payload.json')
+        sftp.cd('/home/ftpuser')               # mporarily chdir to public
+        sftp.put('payload.json')
 	message= {'transfertype':'Sftp used for transfer'}
 	log = MongoClient().DiamondloggingSakif
 	log.sftp.insert(message)

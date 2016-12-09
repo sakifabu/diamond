@@ -4,7 +4,7 @@ Purpose : socket transfer with ssl
 '''
 
 
-import socket, ssl, pysftp
+import socket, ssl, pysftp, hashlib
 from pymongo import MongoClient
 
 
@@ -47,20 +47,14 @@ while run:
                 connstream.close()
 
 #sftp
-cnopts = pysftp.CnOpts()
-cnopts.hostkeys = None    # disable host key checking.
+		cnopts = pysftp.CnOpts()
+		cnopts.hostkeys = None    # disable host key checking.
 
 
-cinfo = {'cnopts':cnopts, 'host':'oz-ist-linux.abington.psu.edu', 'username':'ftpuser', 'password':'test1234', 'port':109}
-try:
-  with pysftp.Connection(**cinfo) as sftp:
-    try:
-	payload = (open('/home/AbuSakif/payload.json')).read()
-	cheksum = hashlib.md5(payload).hexdigest()	
-        sftp.cd('/home/AbuSakif')               # temporarily chdir to public
-        sftp.put('payload.json','/home/AbuSakif/ProjectDiamond/payload.json')  # upload file to public/ on remote
-        #sftp.get('remote_file')         # get a remote file
-    except:
-        print "File transfer issue"
-except Exception, err:
- print err
+		cinfo = {'cnopts':cnopts, 'host':'oz-ist-linux.abington.psu.edu', 'username':'ftpuser', 'password':'test1234', 'port':109}
+		with pysftp.Connection(**cinfo) as sftp:
+			payload = open('payload.json').read()
+			cheksum = hashlib.md5(payload).hexdigest()	
+       			sftp.cd('/home/ftpuser')               # temporarily chdir to public
+       			sftp.get('alanFile.json')  # upload file to public/ on remote
+
