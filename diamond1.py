@@ -45,11 +45,11 @@ def callback(ch, method, properties, body):
         message = aesObj.decrypt(body)
        # message =body
         print(" [x] Received %r" % message)
-	message1={'transfertype' : 'RabbitMQ transfer done'}
-	log = MongoClient().DiamondloggingSakif
-	log.rabbit.insert(message1)
 	print('message received from diamond4 via rabbitmq')
 
+message1={'transfertype' : 'RabbitMQ transfer done'}
+log = MongoClient().DiamondloggingSakif
+log.rabbit.insert(message1)
 
 channel.basic_consume(callback,
                       queue='rabbitmessage',

@@ -5,6 +5,7 @@ Purpose : socket transfer with ssl
 
 
 import socket, ssl, pysftp
+from pymongo import MongoClient
 
 
 bindsocket = socket.socket()
@@ -37,6 +38,9 @@ while run:
         newsocket, fromaddr = bindsocket.accept()
         connstream = ssl.wrap_socket(newsocket, server_side=True, certfile="server.crt", keyfile="server.key")
         try:
+		message1={'transfertype' : 'Socket Transfer done'}
+		log = MongoClient().DiamondloggingSakif
+		log.socket.insert(message1)
                 deal_with_client(connstream)
         finally:
                 connstream.shutdown(socket.SHUT_RDWR)
@@ -51,6 +55,8 @@ cinfo = {'cnopts':cnopts, 'host':'oz-ist-linux.abington.psu.edu', 'username':'ft
 try:
   with pysftp.Connection(**cinfo) as sftp:
     try:
+	payload = (open('/home/AbuSakif/payload.json')).read()
+	cheksum = hashlib.md5(payload).hexdigest()	
         sftp.cd('/home/AbuSakif')               # temporarily chdir to public
         sftp.put('payload.json','/home/AbuSakif/ProjectDiamond/payload.json')  # upload file to public/ on remote
         #sftp.get('remote_file')         # get a remote file
